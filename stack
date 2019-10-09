@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/* Definition of list */
+struct linked_list {
+  int payload;
+  struct linked_list* next;
+};
+
+/* Instance of our list */
+struct linked_list* list = NULL;
+
+int add_to_list(struct linked_list* front, int new_item) {
+   /* Allocate space for new element */
+   struct linked_list* temp;  
+   fprintf(stdout, "add_to_list: enter\n");
+   fprintf(stdout, "add_to_list: allocate space for new item %d\n", new_item);
+   temp = (struct linked_list*)malloc(sizeof(struct linked_list));
+  if (temp == NULL) { return -1; }
+   /* Initialize new element */
+   temp->payload = new_item;
+   temp->next = list;
+   
+   /* Set list to temp, the new front of list*/
+   list = temp;
+   fprintf(stdout, "add_to_list: adding %d to front\n", new_item);
+   fprintf(stdout, "add_to_list: exit\n\n");
+   return 0;
+}
+
+int remove_from_list(struct linked_list* front, int item) {
+   struct linked_list* iterator = front;
+   struct linked_list* previous = NULL; 
+   fprintf(stdout, "remove_from_list: removing %d from list\n", item);
+
+   if (iterator == NULL) { return 0; } /* Return false; list is empty */
+   while (iterator->payload != item) { /* Check if we found the item */
+    previous = iterator;               /* Store pointer to previous item */
+          iterator = iterator->next;        /* Look at next item in list */
+    if (iterator == NULL)             /* Check if end of list */
+       return 0;                       /* Return false; didnâ€™t find item */
+    }
+    
+    /* Found item; break out of loop */
+    if (previous != NULL) 
+       previous->next = iterator->next; /* Remove item from list*/
+    else {  
+       front = iterator->next;         /* Set new front of list */
+       list = front;
+    }
+    /* Free memory of item we are removing */
+    free(iterator);
+    return 1; /* Return true; we found and removed the item */ 
+}
+
+void print_list( ) {
+     struct linked_list* temp;
+     int i = 1;
+     fprintf(stdout, "print_list: enter\n\n");
+
+     temp = list;
+     while (temp != NULL) {
+       fprintf(stdout, "print_list: %d. %d\n", i, temp->payload);
+       temp = temp->next;
+       i++;
+     }
+    fprintf(stdout, "print_list: exit\n\n");
+}
+
+
+int main(void) {
+  int i;
+  
+  for (i = 0; i<100; i++) {
+    add_to_list(list,i);
+  }
+
+  print_list();
+
+  for (i = 0; i<100; i++) {
+    remove_from_list(list,i);
+  }
+
+  print_list();
+}
+
