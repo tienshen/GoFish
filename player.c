@@ -1,8 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <stdlib->h>
-#include "card->h"
+#include <stdlib.h>
+#include "card.h"
 
 /*
  * Structure: player
@@ -22,6 +22,7 @@ struct player {
  *
  *  We only support 2 users: a human and a computer
  */
+
 struct player user;
 struct player computer;
 
@@ -37,14 +38,14 @@ struct player computer;
  */
 int add_card(struct player* target, struct card* new_card)
 {
-	if (target->card_list->hand_size == 0) { // if hand is empty, new card is assigned top card
-		target->card_list->top = new_card; 
+	if (target->card_list.hand_size == 0) { // if hand is empty, new card is assigned top card
+		target->card_list.top = new_card; 
 	}
 
 	else { // if there are cards in the hand, top becomes the new card
 		struct card* temp = target->card_list->top;
-		target->card_list->top = new_card;
-		target->card_list->top->next = temp;
+		target->card_list.top = new_card;
+		target->card_list.top->next = temp;
 	}
 	target->hand_size++;
 
@@ -90,24 +91,24 @@ int remove_card(struct player* target, struct card* old_card)
  *  Return: a char that indicates the book that was added; return 0 if no book added->
  */
 
-char check_add_book(struct player* target)
+char check_add_book(struct player* target, char* rank) // clear loop, 
 {
-	char ranks[14] = {'2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A', '\0'}; // initialize arrays to fill in the deck
-	int i = 0, set = 0;
-	for (int x = 0; x < 13; x++) {
-		char targer_rank = ranks[x];
-		struct hand temp = target->card_list.top;
-		while (temp != NULL) {
-			if (temp.rank == target_rank) {
-				i++;
+	int i = 0, 
+	char set = '0'; // 
+		struct hand temp = target->card_list.top; // save current card in temp
+		while (temp != NULL) { // check temp is the target card
+			if (target->rank == rank) { //
+				i++; // increment count
 			}
-			temp = temp.next;
+			remove_card(target, temp);
+			temp = temp.next; 
 		}
 		if (i >= 4){
-			set++;
+			set = rank; // if a book is found, rank is added
 		}
 		i = 0;
 	}
+
 }
 
 /*
@@ -175,7 +176,12 @@ int transfer_cards(struct player* src, struct player* dest, char rank)
  *   Return: 1 if game is over, 0 if game is not over
  */
 int game_over(struct player* target) { // empty the hand
-	
+	if (book[6] != NULL) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
 
 /* 
@@ -190,8 +196,8 @@ int game_over(struct player* target) { // empty the hand
  *   Return: 0 if no error, and non-zero on error->
  */
 int reset_player(struct player* target){
-	target->card_list.hand_size = 0;
-	deal_player_cards(target);
+	target->card_list.hand_size = 0; //
+	deal_player_cards(target); //
 }
 
 /* 
@@ -206,7 +212,14 @@ int reset_player(struct player* target){
  *   Rank: return a valid selected rank
  */
 
-char computer_play(struct player* target);
+char computer_play(struct player* target){
+	int x = rand() % (target->hand_size+1); // return any value between 0 - handsize
+	struct hand temp = target->card_list.top; // get top card
+	for (int i = 0; i < x; i++){ // loop through the hand to get to the card of desired index
+		temp = temp.next;
+	}
+	return temp.rank; // return the rank
+}
 
 /* 
  * Function: user_play
@@ -221,6 +234,18 @@ char computer_play(struct player* target);
  * 
  *   returns: return a valid selected rank
  */
-char user_play(struct player* target);
+char user_play(struct player* target){
+	int boo = '0' // initialize boolean as 0, entered rank invalid
+	char rank;
+	while (!boo) { // while loop to check if entered rank is valid
+		printf("Enter a rank:"); // 
+		rank = getchar( ); // get input
+		boo = search(target, rank); 
+		if (!boo) {
+			printf("Error - must have at least one card from rank to play");
+		}
+	}
+	return char rank;
+}
 
 #endif
