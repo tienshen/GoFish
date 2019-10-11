@@ -43,20 +43,7 @@ int play_game() {
 	// turn
 	while(game_finished == 0) {
 		if (turn == 0) { // user's term
-			rank = user_play(user);
-			boo = search(computer, rank);
-			if (boo) {
-				card_num = transfer_cards(user, computer, rank);
-				printf("Computer gave you %i cards of rank %c\n", card_num, rank)
-				printf("Request another card")
-				check_add_book(user, rank);
-				turn = (turn+1);
-			}
-			else {
-				printf("Computer says: Go Fish\n");
-				temp = next_card();
-				add_card(user, temp);
-			}
+			user_turn();
 		}
 		else { // computer's term
 			rank = computer_play(computer);
@@ -65,11 +52,43 @@ int play_game() {
 
 			}
 		}
-		turn = (turn+1) % 2; //change state of turn
+		//turn = (turn+1) % 2; //change state of turn
 	}
-
+}
+int user_turn() { // user plays
+	rank = user_play(user); // obtain valid rank request
+	boo = search(computer, rank); //check is target rank is found
+	if (boo) { // if target rank is found
+		card_num = transfer_cards(user, computer, rank);
+		printf("Computer gave you %i cards of rank %c\n", card_num, rank);
+		printf("Request another card");
+		check_add_book(user, rank);
+		turn = (turn+1);
+	}
+	else {
+		printf("Computer says: Go Fish\n");
+		temp = next_card();
+		if(temp->rank == rank) { // if card is of the same book
+			printf("You fished %c, request another card\n", rank);
+			add_card(user, temp);
+			user_turn(); // user go again
+		}
+		else {
+			printf("you fished %c", temp->rank);
+			add_card(user, temp); 
+		}
+	}
+	return 1;
 }
 
-int play_turn(struct player* src, struct player* dest, int turn) {
+int computer_turn() {
+	rank = computer_play(computer); // obatain valid rank request
+	boo = search(user, rank); // check if target rank is found
+	if (boo){ // if target rank is found
 
+	}
+}
+
+int check winner() {
+	
 }
