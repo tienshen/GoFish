@@ -4,18 +4,9 @@ int main(int args, char* argv[])
 {
 	//fprintf(stdout, "Put your code here.");
 	/* initialize game */
-	//initialize deck
-	shuffle();
-	//initialize players
-	struct player human;
-	struct player computer;
-	deal_player_cards(human);
-	deal_player_cards(computer);
-	// initialize the state of the game
-	int games_finished = 0;
-	// turn
-
-	while (games_finished == 0){ //player plays
+	int play_no_more = 0;
+	while (play_no_more == 0){ //player plays
+		play_game();
 		// player 1 plays
 
 		// check for books
@@ -33,7 +24,24 @@ int main(int args, char* argv[])
 		// if so, start the game
 	}
 }
-
-int human_play() {}
-
-int computer_play() {}
+int play_game() {
+	//initialize deck
+	int turn = rand() % 2; //rand number to determine who plays first
+	shuffle();
+	//initialize players
+	struct player user;
+	struct player computer;
+	deal_player_cards(human);
+	deal_player_cards(computer);
+	// initialize the state of the game
+	int game_finished = 0;
+	// turn
+	while(game_finished == 0) {
+		if (turn == 0) {
+			user_play(user);
+		}
+		else {
+			computer_play(computer);
+		}
+	}
+}
