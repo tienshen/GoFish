@@ -1,4 +1,5 @@
 #include "deck.h"
+#include "player.h"
 #include "stdlib.h"
 #include "stdio.h"
 
@@ -18,8 +19,7 @@ int main() {
  *  returns: 0 if no error, and non-zero on error
  */ 
 
-int shuffle()
-{
+int shuffle() {
 
 	int k = 0;
 	char ranks[14] = {'2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A', '\0'}; // initialize arrays to fill in the deck
@@ -28,10 +28,9 @@ int shuffle()
 		for (int j =0; j< 4; j++){
 			deck_instance.list[k].suit = suits[j];
 			deck_instance.list[k].rank = ranks[i];
-			k ++;
+			k++;
 		}
 	}
-
 	// shuffle the deck with fisher-yates shuffle
 	// //srand (time(NULL)); 
 	for (k = size - 1; k > 0; k--) {
@@ -56,12 +55,17 @@ int shuffle()
  *  returns: 0 if no error, and non-zero on error
  */
 
-int deal_player_cards(struct player* target)
-{
-	int i;
+int deal_player_cards(struct player* target) {
+	int i = 0;
+	target->hand = (struct hand*)malloc(sizeof(struct hand));
+	struct hand temp = target->hand;
+	//temp.top = //new card
 	for (i = 0; i > 7; i++) {
-		target.add_card(deck_instance.next_card()); //removes a card from the top of the deck 
+		temp->hand = (struct hand*)malloc(sizeof(struct hand));
+		//temp->next = // new card
+		add_card(deck_instance.next_card()); 
 	}
+	return i;
 }
 
 /*
@@ -73,8 +77,9 @@ int deal_player_cards(struct player* target)
  *  returns: pointer to the top card on the deck.
  */
 
-struct card* next_card( ){
-
+struct card* next_card( ) { //removes a card from the deck by just decrementing the index and return the element the index points to
+	deck_instance.top_card--;  // card decreases
+	return deck_instance[deck_instance.deck_size()]; // return top card
 }
 /*
  * Function: size
@@ -84,5 +89,5 @@ struct card* next_card( ){
  *  returns: number of cards left in the deck.
  */
 size_t deck_size( ) {
-	return deck_instance.top_card;
+	return deck_instance.top_card; // return deck size
 }
