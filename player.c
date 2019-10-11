@@ -87,13 +87,13 @@ int remove_card(struct player* target, struct card old_card)
  *  Return: a char that indicates the book that was added; return 0 if no book added->
  */
 
-char check_add_book(struct player* target, char* rank) {
+char check_add_book(struct player* target, char rank) {
 	int i = 0;
 	char set = '0'; // 
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = target->card_list; // save current card in temp
 	while (temp != NULL) { // check temp is the target card
-		if (target->card_list->top.rank == *rank) { //
+		if (target->card_list->top.rank == rank) { //
 			i++; // increment count
 			//remove_card(target, temp->top); //
 			temp = temp->next;
