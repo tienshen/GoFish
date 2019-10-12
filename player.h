@@ -14,6 +14,7 @@ struct player {
   struct hand* card_list;
   char book[7];
   size_t hand_size;
+  int book_index;
 };
 
 /* 
@@ -22,8 +23,8 @@ struct player {
  *
  *  We only support 2 users: a human and a computer
  */
-struct player user;
-struct player computer;
+//struct player user;
+//struct player computer;
 
 /*
  * Function: add_card

@@ -55,14 +55,26 @@ void shuffle() {
  */
 
 int deal_player_cards(struct player* target) {
-	int i = 0;
-	//struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
-	//temp = target->card_list;
-	//temp.top = //new card
-	for (i = 0; i > 7; i++) {
-		add_card(target, next_card()); 
+	// int i = 0;
+	// //struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
+	// //temp = target->card_list;
+	// //temp.top = //new card
+	// for (i = 0; i > 7; i++) {
+	// 	add_card(target, next_card()); 
+	// }
+	// return i;
+	struct card draw;
+	int i;
+	struct hand* new_hand;
+	for(i=0; i<7; i++) {
+		draw=next_card();
+		new_hand = (struct hand *)malloc(sizeof(struct hand));
+		new_hand->top = draw;
+		new_hand->next = target->card_list;
+		target->card_list = new_hand;
 	}
-	return i;
+	target->hand_size=7;
+	return 0;	
 }
 
 /*

@@ -1,9 +1,8 @@
-#ifndef PLAYER_H
-#define PLAYER_H
 
 #include <stdlib.h>
 #include <string.h>
 #include "card.h"
+#include "player.h"
 #include <stdio.h>
 
 /*
@@ -12,12 +11,6 @@
  *  Each player holds some number of cards in their hand
  *  Each player can have at most 7 "books" before winning 
  */
-struct player {
-  struct hand* card_list;
-  char book[7];
-  size_t hand_size;
-  int book_index;
-};
 
 /* 
  * Instance Variables: user, computer
@@ -25,15 +18,16 @@ struct player {
  *
  *  We only support 2 users: a human and a computer
  */
-struct player user;
-struct player computer;
+//struct player user;
+//struct player computer;
 
 void print_hand(struct player* target) {
+	printf("%i", target->hand_size);
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = target->card_list; // get top card
-	printf("Player 1's hand: ");
-	for (int i = 0; i < target->hand_size; i++) {
-		printf("%c %c,   ", temp->top.suit, temp->top.rank);
+	printf("\nPlayer 1's hand- ");
+	for (int i = 0; i < target->book_index; i++) {
+		printf("%c%c pop ", temp->top.suit, temp->top.rank);
 		temp = temp->next;
 	}
 }
@@ -49,16 +43,17 @@ void print_hand(struct player* target) {
  */
 int add_card(struct player* target, struct card new_card)
 {
+	struct hand* new_hand = (struct hand *)malloc(sizeof(struct hand));
+	new_hand->top = new_card;
 	if (target->hand_size == 0) { // if hand is empty, new card is assigned top card
-		target->card_list->top = new_card; 
+		target->card_list = new_hand; 
+		target->hand_size++;
 	}
 	else { // if there are cards in the hand, top becomes the new card
-		struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
-		temp = target->card_list; //save current top hand in temp
-		target->card_list->top = new_card; // set new top card
-		*target->card_list->next = *temp; // first card's next hand becomes temp
+		new_hand->next = target->card_list;
+		target->card_list = new_hand;
+		target->hand_size++;
 	}
-	target->hand_size++;
 	return 0;
 }
 /*
@@ -266,5 +261,3 @@ char user_play(struct player* target){
 	return rank;
 }
 
-
-#endif

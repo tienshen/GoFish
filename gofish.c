@@ -1,5 +1,5 @@
-#ifndef GOFISH_H
-#define GOFISH_H
+// #ifndef GOFISH_H
+// #define GOFISH_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,20 +8,21 @@
 #include "deck.h"
 #include "player.h"
 
-void play_game();
-void user_turn(struct player* user, struct player* computer);
-void computer_turn(struct player* user, struct player* computer);
-void check_winner(struct player* user, struct player* computer);
+// void play_game();
+// int user_turn(struct player* user, struct player* computer);
+// int computer_turn(struct player* user, struct player* computer);
+// int check_winner(struct player* user, struct player* computer);
+
 int main(int args, char* argv[]) {
 	//fprintf(stdout, "Put your code here.");
 	/* initialize game */
-	//initialize deck
 
 	play_game();
 
 }
 void play_game() {
-	int turn = rand() % 2; //rand number to determine who plays first
+	//int turn = rand() % 2; //rand number to determine who plays first
+	int turn = 0; // computer goes first
 	printf("Shuffling deck...\n");
 	shuffle();
 	//initialize players
@@ -29,26 +30,29 @@ void play_game() {
 	struct player* computer = (struct player*)malloc(sizeof(struct player));
 	deal_player_cards(user);
 	deal_player_cards(computer);
+	print_hand(user);
 	// initialize the state of the game
 	int game_finished = 0;
 	// initialize some saved game variables
 	// char rank = '0';
 	// struct card* temp_card = (struct card*)malloc(sizeof(struct card)); // declare temp
 	// play the game
+
 	while(game_finished == 0) {
+		//game_finished = check_winner(user, computer);
+		if (game_finished == 1) {
+			break;
+		}
 		if (turn == 0) { // user's term
-			user_turn(user, computer);
-			turn = 1;
+			turn = user_turn(user, computer);
 		}
 		else { // computer's term
-			computer_turn(user, computer);
-			turn = 0;
+			turn = computer_turn(user, computer);
 		}
 	}
 }
 
-void user_turn(struct player* user, struct player* computer) { // user plays
-	check_winner(user, computer);
+int user_turn(struct player* user, struct player* computer) { // user plays
 	char rank = user_play(user); // obtain valid rank request
 	int boo = transfer_cards(user, computer, rank); //check is target rank is found
 	if (boo != 0) { // if target rank is found
@@ -56,6 +60,7 @@ void user_turn(struct player* user, struct player* computer) { // user plays
 		//printf("Player 2 gave you %i cards of rank %c\n", card_num, rank);
 		printf("Request another card");
 		check_add_book(user, rank);
+		return 0;
 	}
 	else {
 		printf("Computer tells to Go Fish\n");
@@ -63,23 +68,24 @@ void user_turn(struct player* user, struct player* computer) { // user plays
 		add_card(user, temp);
 		if(temp.rank == rank) { // if card is of the same book
 			printf("You fished %c, request another card\n", rank);
-			user_turn(user, computer); // user go again
+			return 0; // user go again
 		}
 		else {
 			printf("you fished %c\n", temp.rank);
 		}
 	}
+	return 1;
 }
 
-void computer_turn(struct player* user, struct player* computer) {
-	check_winner(user, computer);
+int computer_turn(struct player* user, struct player* computer) {
 	char rank = computer_play(computer); // obatain valid rank request
 	int boo = transfer_cards(computer, user, rank); // check if target rank is found
 	if (boo != 0){ // if target rank is found
 		//int card_num = transfer_cards(computer, user, rank);
 		//printf("Computer requests you %c and you gave him %i\n cards of rank %c\n", rank, card_num, rank);
 		check_add_book(user, rank);
-		computer_turn(user, computer); // computer go again
+		//computer_turn(user, computer); // computer go again
+		return 1;
 	}
 	else {
 		//printf("Computer requests %c, you do not have the rank, computer draws card from the deck\n");
@@ -87,17 +93,32 @@ void computer_turn(struct player* user, struct player* computer) {
 		add_card(computer, temp);
 		if (temp.rank == rank) {
 			//printf("computer draws a card of the requested rank. Computer gets another turn.\n")
-			computer_turn(user, computer); //computer goes again
+			//computer_turn(user, computer); //computer goes again
+			return 1;
 		} // else, term is complete
+		return 0;
 	}
 }
 
-void check_winner(struct player* user, struct player* computer) {
-	printf("Player 1 books:\n");
-	printf("Player 2 books:\n");
+int check_winner(struct player* user, struct player* computer) {
+	print_hand(user);
+		// struct hand* current_hand = (struct hand*)malloc(sizeof(struct hand));
+		// current_hand = user->card_list;
+		// while(current_hand != NULL) {
+		// 	printf("%c%c c", current_hand->top.rank, current_hand->top.suit);
+		// 	current_hand=current_hand->next;
+		//}
+	printf("\nPlayer 1's books- ");
+	for (int i = 0; i<user->book_index; i ++) {
+		printf("%c ", user->book[user->book_index]);
+	}
+	printf("\nPlayer 2's books- ");
+	for (int i = 0; i<computer->book_index; i ++) {
+		printf("%c ", computer->book[user->book_index]);
+	}
 	char play;
 	if(game_over(user)) {
-		printf("Player 1 wins!\n");
+		printf("\nPlayer 1 wins!\n");
 		printf("Do you want to play again [Y/N]:\n");
 		scanf(" %c", &play);
 		if (play == 'Y') {
@@ -105,6 +126,7 @@ void check_winner(struct player* user, struct player* computer) {
 		}
 		else {
 			printf("Exiting.\n");
+			return 1;
 		}
 	}
 	if(game_over(computer)) {
@@ -116,7 +138,9 @@ void check_winner(struct player* user, struct player* computer) {
 		}
 		else {
 			printf("Exiting.\n");
+			return 1;
 		}
 	}
+	return 0;
 }
-#endif
+//#endif
