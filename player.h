@@ -62,7 +62,7 @@ int remove_card(struct player* target, struct card old_card);
  *  Return: a char that indicates the book that was added; return 0 if no book added.
  */
 
-char check_add_book(struct player* target);
+char check_add_book(struct player* target, char rank);
 
 /*
  * Function: search

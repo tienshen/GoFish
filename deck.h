@@ -33,7 +33,7 @@ struct deck deck_instance;
  *  returns: 0 if no error, and non-zero on error
  */ 
 
-int shuffle();
+void shuffle();
 
 /*
  * Function: deal_player_cards

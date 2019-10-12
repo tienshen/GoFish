@@ -59,6 +59,7 @@ int add_card(struct player* target, struct card new_card)
 		*target->card_list->next = *temp; // first card's next hand becomes temp
 	}
 	target->hand_size++;
+	return 0;
 }
 /*
  * Function: remove_card
@@ -84,6 +85,7 @@ int remove_card(struct player* target, struct card old_card)
 		prev = first;
 		first = first->next;
 	}
+	return 0;
 }
 /*
  * Function: check_add_book
@@ -140,9 +142,8 @@ int search(struct player* target, char rank) // linear search implementation
 {
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = target->card_list; // save current card in temp
-	struct card compareTo;
 	while (temp != NULL) {
-		if (temp->top.rank = rank) {
+		if (temp->top.rank == rank) {
 			return 1;
 		}
 		temp = temp->next;
@@ -174,7 +175,7 @@ int transfer_cards(struct player* src, struct player* dest, char rank)
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = src->card_list; // I modified the search method to make transfer method
 	while (temp != NULL) {
-		if (temp->top.rank = rank) {
+		if (temp->top.rank == rank) {
 			remove_card(src, temp->top); // remove card from src
 			add_card(dest, temp->top); // add card to dest
 		}
