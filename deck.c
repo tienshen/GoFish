@@ -6,9 +6,9 @@
 int size;
 
 // test code here
-int main() {
-	shuffle();
-}
+// int main() {
+// 	shuffle();
+// }
 /*
  * Function: shuffle
  * --------------------
@@ -18,7 +18,7 @@ int main() {
  *  returns: 0 if no error, and non-zero on error
  */ 
 
-int shuffle() {
+void shuffle() {
 	size = 52;
 	int k = 0;
 	char ranks[14] = {'2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A', '\0'}; // initialize arrays to fill in the deck
@@ -38,9 +38,9 @@ int shuffle() {
 		deck_instance.list[k] = deck_instance.list[x]; // the following 2 lines swap the two cards
 		deck_instance.list[x] = temp;
 	}
-	for (k = 0; k < 52; k++){
-		printf("rank is: %c, character = %c\n", deck_instance.list[k].suit, deck_instance.list[k].rank);
-	}
+	// for (k = 0; k < 52; k++){
+	// 	printf("rank is: %c, character = %c\n", deck_instance.list[k].suit, deck_instance.list[k].rank);
+	// }
 }
 
 /*
