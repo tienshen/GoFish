@@ -22,12 +22,12 @@
 //struct player computer;
 
 void print_hand(struct player* target) {
-	printf("%i", target->hand_size);
+	//printf("%i", target->hand_size);
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = target->card_list; // get top card
 	printf("\nPlayer 1's hand- ");
-	for (int i = 0; i < target->book_index; i++) {
-		printf("%c%c pop ", temp->top.suit, temp->top.rank);
+	for (int i = 0; i < target->hand_size; i++) {
+		printf("%c%c ", temp->top.suit, temp->top.rank);
 		temp = temp->next;
 	}
 }
@@ -249,12 +249,11 @@ char computer_play(struct player* target){
 char user_play(struct player* target){
 	int boo = '0'; // initialize boolean as 0, entered rank invalid
 	char rank;
-	print_hand(target);
-	while (!boo) { // while loop to check if entered rank is valid
+	while (boo == 0) { // while loop to check if entered rank is valid
 		printf("Player 1's turn, enter a Rank:"); // 
-		rank = getchar( ); // get input
+		scanf(" %c", &rank); // get input
 		boo = search(target, rank); 
-		if (!boo) {
+		if (boo == 1) {
 			printf("Error - must have at least one card from rank to play");
 		}
 	}
