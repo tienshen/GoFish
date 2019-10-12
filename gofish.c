@@ -102,12 +102,6 @@ also announces the winner and decide to play again if there is a winner
 */
 int check_winner(struct player* user, struct player* computer) {
 	print_hand(user);
-		// struct hand* current_hand = (struct hand*)malloc(sizeof(struct hand));
-		// current_hand = user->card_list;
-		// while(current_hand != NULL) {
-		// printf("%c%c c", current_hand->top.rank, current_hand->top.suit);
-		// current_hand=current_hand->next;
-		//}
 	printf("\nPlayer 1's books- ");
 	for (int i = 0; i<user->book_index; i ++) {
 		printf("%c ", user->book[user->book_index]);

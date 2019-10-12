@@ -247,16 +247,14 @@ char computer_play(struct player* target){
  *   returns: return a valid selected rank
  */
 char user_play(struct player* target){
-	int boo = '0'; // initialize boolean as 0, entered rank invalid
-	char rank;
-	while (boo == 0) { // while loop to check if entered rank is valid
-		printf("Player 1's turn, enter a Rank:"); // 
-		scanf(" %c", &rank); // get input
-		boo = search(target, rank); 
-		if (boo == 1) {
+	char input;
+	int boo=0;
+	while(boo == 0) {
+		printf("\nPlayer 1's turn, enter a Rank: ");
+		scanf(" %c", &input);
+		boo = search(target, input);
+		if(boo == 0)
 			printf("Error - must have at least one card from rank to play");
-		}
 	}
-	return rank;
-}
+	return input;}
 
