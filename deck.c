@@ -3,8 +3,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-// int i, j, k;
-int size = 52;
+int size;
 
 // test code here
 int main() {
@@ -20,7 +19,7 @@ int main() {
  */ 
 
 int shuffle() {
-
+	size = 52;
 	int k = 0;
 	char ranks[14] = {'2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A', '\0'}; // initialize arrays to fill in the deck
 	char suits[5] = {'C', 'D', 'S', 'H', '\0'};
@@ -57,13 +56,11 @@ int shuffle() {
 
 int deal_player_cards(struct player* target) {
 	int i = 0;
-	target->hand = (struct hand*)malloc(sizeof(struct hand));
-	struct hand temp = target->hand;
+	//struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
+	//temp = target->card_list;
 	//temp.top = //new card
 	for (i = 0; i > 7; i++) {
-		temp->hand = (struct hand*)malloc(sizeof(struct hand));
-		//temp->next = // new card
-		add_card(deck_instance.next_card()); 
+		add_card(target, next_card()); 
 	}
 	return i;
 }
@@ -77,9 +74,9 @@ int deal_player_cards(struct player* target) {
  *  returns: pointer to the top card on the deck.
  */
 
-struct card* next_card( ) { //removes a card from the deck by just decrementing the index and return the element the index points to
-	deck_instance.top_card--;  // card decreases
-	return deck_instance[deck_instance.deck_size()]; // return top card
+struct card next_card( ) { //removes a card from the deck by just decrementing the index and return the element the index points to
+	size--;  // card decreases
+	return deck_instance.list[size]; // return top card
 }
 /*
  * Function: size
@@ -89,5 +86,5 @@ struct card* next_card( ) { //removes a card from the deck by just decrementing 
  *  returns: number of cards left in the deck.
  */
 size_t deck_size( ) {
-	return deck_instance.top_card; // return deck size
+	return size; // return deck size
 }

@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <stdlib.h>
+#include <string.h>
 #include "card.h"
 #include <stdio.h>
 
@@ -15,6 +16,7 @@ struct player {
   struct hand* card_list;
   char book[7];
   size_t hand_size;
+  int book_index;
 };
 
 /* 
@@ -26,6 +28,15 @@ struct player {
 struct player user;
 struct player computer;
 
+void print_hand(struct player* target) {
+	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
+	temp = target->card_list; // get top card
+	printf("Player 1's hand: ");
+	for (int i = 0; i < target->hand_size; i++) {
+		printf("%c %c,   ", temp->top.suit, temp->top.rank);
+		temp = temp->next;
+	}
+}
 /*
  * Function: add_card
  * -------------------
@@ -41,7 +52,6 @@ int add_card(struct player* target, struct card new_card)
 	if (target->hand_size == 0) { // if hand is empty, new card is assigned top card
 		target->card_list->top = new_card; 
 	}
-
 	else { // if there are cards in the hand, top becomes the new card
 		struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 		temp = target->card_list; //save current top hand in temp
@@ -89,20 +99,30 @@ int remove_card(struct player* target, struct card old_card)
 
 char check_add_book(struct player* target, char rank) {
 	int i = 0;
-	char set = '0'; // 
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = target->card_list; // save current card in temp
+	//utilize first loop to check if there is a book
 	while (temp != NULL) { // check temp is the target card
 		if (target->card_list->top.rank == rank) { //
 			i++; // increment count
-			//remove_card(target, temp->top); //
 			temp = temp->next;
 		}
 	}
-	if (i >= 4) {
-		set = *rank; // if a book is found, rank is added
+	if (i >= 4) { // if a book is found, rank is added
+		target->book[target->book_index] = rank;
+		target->book_index++;
+		// second loop removes if a book is found
+		temp = target->card_list;
+		while (temp != NULL) { // check temp is the target card
+			if (target->card_list->top.rank == rank) { //
+				i++; // increment count
+				remove_card(target, temp->top); //
+				temp = temp->next;
+			}
+			return rank;
+		}
 	}
-	i = 0;
+	return '0';
 }
 
 
@@ -174,7 +194,7 @@ int transfer_cards(struct player* src, struct player* dest, char rank)
  *   Return: 1 if game is over, 0 if game is not over
  */
 int game_over(struct player* target) { // empty the hand
-	if (target->book[6] != NULL) {
+	if (target->book_index == 6) {
 		return 1;
 	}
 	else {
@@ -193,24 +213,20 @@ int game_over(struct player* target) { // empty the hand
  * 
  *   Return: 0 if no error, and non-zero on error->
  */
-int reset_player(struct player* target){
-	target->hand_size = 0; //
-	int i = deal_player_cards(target); //
-	return i;
-}
+// int reset_player(struct player* target){
+// 	target->hand_size = 0; //
+// 	int i = deal_player_cards(target); //
+// 	return i;
+// }
 
 /* 
  * Function: computer_play
  * -----------------------
- *
  *   Select a rank randomly to play this turn-> The player must have at least
  *   one card of the selected rank in their hand->
- *
  *   target: the player's hand to select from
- *
  *   Rank: return a valid selected rank
  */
-
 char computer_play(struct player* target){
 	int x = rand() % (target->hand_size+1); // return any value between 0 - handsize
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
@@ -237,8 +253,9 @@ char computer_play(struct player* target){
 char user_play(struct player* target){
 	int boo = '0'; // initialize boolean as 0, entered rank invalid
 	char rank;
+	print_hand(target);
 	while (!boo) { // while loop to check if entered rank is valid
-		printf("Enter a rank:"); // 
+		printf("Player 1's turn, enter a Rank:"); // 
 		rank = getchar( ); // get input
 		boo = search(target, rank); 
 		if (!boo) {
@@ -248,14 +265,5 @@ char user_play(struct player* target){
 	return rank;
 }
 
-void print_hand(struct player* target){
-	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
-	temp = target->card_list; // get top card
-	printf("Your hand has: \n")
-	for (int i = 0; i < target->hand_size; i++) {
-		printf("%c %c,   ", temp->top.suit, temp->top.rank);
-		temp = temp->next
-	}
-}
 
 #endif

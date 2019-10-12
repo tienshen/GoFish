@@ -35,15 +35,7 @@ struct player computer;
  *
  *  returns: return 0 if no error, non-zero otherwise
  */
-int add_card(struct player* target, struct card* new_card)
-{
-	if (target->card_list->hand_size == 0) { // if hand is empty, new card is assigned top card
-		target->card_list->top = new_card;
-		target->hand_size++;
-	}
-	else {
-
-	}
+int add_card(struct player* target, struct card new_card);
 
 /*
  * Function: remove_card
@@ -55,8 +47,8 @@ int add_card(struct player* target, struct card* new_card)
  *
  *  returns: return 0 if no error, non-zero otherwise
  */
-}
-int remove_card(struct player* target, struct card* old_card);
+
+int remove_card(struct player* target, struct card old_card);
 
 /*
  * Function: check_add_book
@@ -124,7 +116,7 @@ int game_over(struct player* target);
  * 
  *   Return: 0 if no error, and non-zero on error.
  */
-int reset_player(struct player* target);
+//int reset_player(struct player* target);
 
 /* 
  * Function: computer_play
@@ -153,6 +145,8 @@ char computer_play(struct player* target);
  *   returns: return a valid selected rank
  */
 char user_play(struct player* target);
+
+void print_hand(struct player* target);
 
 #endif
 

@@ -12,7 +12,7 @@
  */
 struct deck {
   struct card list[52];
-  int top_card = 51; // the index of card on top
+  int top_card; // the index of card on top
 };
 
 /* 
@@ -57,7 +57,7 @@ int deal_player_cards(struct player* target);
  *  returns: pointer to the top card on the deck.
  */
 
-struct card* next_card( );
+struct card next_card( );
 
 /*
  * Function: size
