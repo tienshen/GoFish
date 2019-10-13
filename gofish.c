@@ -65,7 +65,7 @@ int user_turn(struct player* user, struct player* computer) { // user plays
 		printf("   -Player 2 has no %c's, Go Fish\n", rank);
 		struct card temp = next_card();
 		add_card(user, temp);
-		check_add_book(user, rank);
+		check_add_book(user, temp.rank);
 		printf("   -Player 1 fished %c%c\n", temp.suit, temp.rank);
 		if(temp.rank == rank) { // if card is of the same book
 			printf("   -Player 1's turn\n\n\n");
@@ -91,7 +91,7 @@ int computer_turn(struct player* user, struct player* computer) {
 	else {
 		struct card temp = next_card();
 		add_card(computer, temp);
-		check_add_book(user, rank);
+		check_add_book(user, temp.rank);
 		if (temp.rank == rank) {
 			printf("   -Player 2 fished %c%c\n   -Player 2's turn\n\n\n", temp.suit, rank);
 			return 1;
@@ -109,11 +109,11 @@ int check_winner(struct player* user, struct player* computer) {
 	print_hand(computer);
 	printf("Player 1's books- ");
 	for (int i = 0; i<user->book_index; i ++) {
-		printf("%c ", user->book[user->book_index]);
+		printf("%c ", user->book[i]);
 	}
 	printf("\nPlayer 2's books- ");
 	for (int i = 0; i<computer->book_index; i ++) {
-		printf("%c ", computer->book[user->book_index]);
+		printf("%c ", computer->book[i]);
 	}
 	printf("\n");
 	char play;

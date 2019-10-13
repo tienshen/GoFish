@@ -93,17 +93,7 @@ int remove_card(struct player* target, struct card old_card)
 	}
 	return 0;
 }
-/*
- * Function: check_add_book
- * ------------------------
- *  Check if a player has all 4 cards of the same rank->
- *  If so, remove those cards from the hand, and add the rank to the book->
- *  Returns after finding one matching set of 4, so should be called after adding each a new card->
- * 
- *  target: pointer to the player to check
- *  
- *  Return: a char that indicates the book that was added; return 0 if no book added->
- */
+
 
 void check_add_book(struct player* target, char rank) {
 	int i = 0;
@@ -112,11 +102,11 @@ void check_add_book(struct player* target, char rank) {
 	temp = target->card_list; // save current card in temp
 	//utilize first loop to check if there is a book
 	while (j < target->hand_size) { // check temp is the target card
-		j++;
 		if (temp->top.rank == rank) { //
 			i++; // increment count
-			temp = temp->next;
 		}
+		temp = temp->next;
+		j++;
 	}
 	if (i == 4) { // if a book is found, rank is added
 		printf("   -Player books %c\n", rank);
@@ -126,26 +116,16 @@ void check_add_book(struct player* target, char rank) {
 		temp = target->card_list;
 		j = 0;
 		while (j < target->hand_size) { // check temp is the target card
-			if (target->card_list->top.rank == rank) { //
+			if (temp->top.rank == rank) { //
 				remove_card(target, temp->top); //
-				temp = temp->next;
+				j--; // hand size reduces, count must reduce too
 			}
+			temp = temp->next;
 			j++;
 		}
 	}
 }
 
-
-/*
- * Function: search
- * ----------------
- *  Search a player's hand for a requested rank->
- *  
- *  rank: the rank to search for
- *  target: the player (and their hand) to search
- *
- *  Return: If the player has a card of that rank, return 1, else return 0
- */
 int search(struct player* target, char rank) // linear search implementation
 {
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
@@ -159,21 +139,6 @@ int search(struct player* target, char rank) // linear search implementation
 	return 0;
 }
 
-/*
- * Function: transfer_cards
- * ------------------------
- *   Transfer cards of a given rank from the source player's 
- *   hand to the destination player's hand-> Remove transferred
- *   cards from the source player's hand-> Add transferred cards
- *   to the destination player's hand->
- *   
- *   src: a pointer to the source player
- *   dest: a pointer to the destination player
- *   rank: the rank to transfer
- *
- *   Return: 0 if no cards found/transferred, <0 if error, otherwise 
- *   return value indicates number of cards transferred
- */ 
 int transfer_cards(struct player* src, struct player* dest, char rank)
 {
 	int i = 0;
@@ -193,16 +158,6 @@ int transfer_cards(struct player* src, struct player* dest, char rank)
 	return i;
 }
 
-/*
- * Function: game_over
- * -------------------
- *   Boolean function to check if a player has 7 books yet
- *   and the game is over
- *
- *   target: the player to check
- *   
- *   Return: 1 if game is over, 0 if game is not over
- */
 int game_over(struct player* target) { // empty the hand
 	if (target->book_index == 6) {
 		return 1;
@@ -212,31 +167,13 @@ int game_over(struct player* target) { // empty the hand
 	}
 }
 
-/* 
- * Function: reset_player
- * ----------------------
- *
- *   Reset player by free'ing any memory of cards remaining in hand,
- *   and re-initializes the book->  Used when playing a new game->
- * 
- *   target: player to reset
- * 
- *   Return: 0 if no error, and non-zero on error->
- */
 // int reset_player(struct player* target){
 // 	target->hand_size = 0; //
 // 	int i = deal_player_cards(target); //
 // 	return i;
 // }
 
-/* 
- * Function: computer_play
- * -----------------------
- *   Select a rank randomly to play this turn-> The player must have at least
- *   one card of the selected rank in their hand->
- *   target: the player's hand to select from
- *   Rank: return a valid selected rank
- */
+
 char computer_play(struct player* target){
 	int i = target->hand_size;
 	int x = rand() % (i+1); // return any value between 0 - handsize
@@ -296,11 +233,23 @@ void draw_3_cards(struct player* target) {
 // 	print_hand(user);
 // 	printf("p2 ");
 // 	print_hand(computer);
-// 	printf("test transfer_card\n");
-// 	transfer_cards(user, computer, 'J');
+// 	printf("test check add book\n");
+// 	char rank = '8';
+// 	check_add_book(user, rank);
+// 	transfer_cards(computer, user, rank); //check is target rank is found
+// 	check_add_book(user, rank);
 // 	print_hand(user);
-// 	printf("p2 ");
-// 	print_hand(computer);
+// 	printf("Player 1's books- ");
+// 	// for (int i = 0; i<user->book_index; i ++) {
+// 	// 	printf("%c ", user->book[i]);
+// 	// }
+// 	printf("\n");
+// 	// printf("test transfer_card\n");
+// 	// transfer_cards(user, computer, 'J');
+// 	// print_hand(user);
+// 	// printf("p2 ");
+// 	// print_hand(computer);
+
 // 	// printf("\ntest remove card\n");
 // 	// int i = remove_card(user, user->card_list->next->top);
 // 	// // if (i != 1) {
