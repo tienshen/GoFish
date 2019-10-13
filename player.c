@@ -26,7 +26,7 @@ void print_hand(struct player* target) {
 	//printf("%i", target->hand_size);
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = target->card_list; // get top card
-	printf("\nPlayer 1's hand- ");
+	printf("Player 1's hand- ");
 	for (int i = 0; i < target->hand_size; i++) {
 		printf("%c%c ", temp->top.suit, temp->top.rank);
 		temp = temp->next;
@@ -286,6 +286,9 @@ int main(int args, char* argv[]) {
 	print_hand(computer);
 	printf("\ntest remove card\n");
 	int i = remove_card(user, user->card_list->next->top);
-	if (i != 1) 
+	if (i != 1) {
 		print_hand(user);
+		printf("there are %i in the hand\n", user->hand_size);
+	}
+	
 }
