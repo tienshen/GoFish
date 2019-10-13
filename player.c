@@ -3,6 +3,7 @@
 #include <string.h>
 #include "card.h"
 #include "player.h"
+#include "deck.h"
 #include <stdio.h>
 
 /*
@@ -30,6 +31,7 @@ void print_hand(struct player* target) {
 		printf("%c%c ", temp->top.suit, temp->top.rank);
 		temp = temp->next;
 	}
+	printf("\n");
 }
 /*
  * Function: add_card
@@ -70,15 +72,24 @@ int remove_card(struct player* target, struct card old_card)
 {
 	struct hand* first = target->card_list;
 	struct hand* prev = first;
-	if (first->top.rank == old_card.rank) {
-		first = first->next;
+	if (target->card_list->top.rank == old_card.rank && target->card_list->top.suit == old_card.suit) {
+		printf("gets through\n");
+		target->card_list = target->card_list->next;
+		target->hand_size--;
 	}
-	while(first != NULL) {
-		if (first->top.rank == old_card.rank) {
-			prev->next = first->next;
+	else {
+		while(first != NULL) {
+			if (first->top.rank == old_card.rank && first->top.suit == old_card.suit) {
+				prev->next = prev->next->next; // 1 links to 3
+				prev = prev->next; // 1 is now 2
+				first = prev->next; // 2 is now 4, skips 3
+				target->hand_size--;
+			}
+			else{
+				prev = first; //reset prev and next
+				first = first->next;
+			}
 		}
-		prev = first;
-		first = first->next;
 	}
 	return 0;
 }
@@ -163,9 +174,9 @@ int search(struct player* target, char rank) // linear search implementation
  */ 
 int transfer_cards(struct player* src, struct player* dest, char rank)
 {
-	int boo = search(src, rank); //determine if player had the card
-	if (!boo) { // if boo = 0, return 0
-		return boo;
+	int i = 0;
+	if (search(src, rank) == 0) { // if boo = 0, return 0
+		return i;
 	}
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = src->card_list; // I modified the search method to make transfer method
@@ -173,10 +184,11 @@ int transfer_cards(struct player* src, struct player* dest, char rank)
 		if (temp->top.rank == rank) {
 			remove_card(src, temp->top); // remove card from src
 			add_card(dest, temp->top); // add card to dest
+			i++;
 		}
 		temp = temp->next;
 	}
-	return boo;
+	return i;
 }
 
 /*
@@ -256,5 +268,24 @@ char user_play(struct player* target){
 		if(boo == 0)
 			printf("Error - must have at least one card from rank to play");
 	}
-	return input;}
+	return input;
+}
 
+
+int main(int args, char* argv[]) {
+	//int turn = 0; // computer goes first
+	printf("Shuffling deck...\n");
+	shuffle();
+	//initialize players
+	struct player* user = (struct player*)malloc(sizeof(struct player));
+	struct player* computer = (struct player*)malloc(sizeof(struct player));
+	deal_player_cards(user);
+	deal_player_cards(computer);
+	print_hand(user);
+	printf("p2 ");
+	print_hand(computer);
+	printf("\ntest remove card\n");
+	int i = remove_card(user, user->card_list->next->top);
+	if (i != 1) 
+		print_hand(user);
+}
