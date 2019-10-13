@@ -2,6 +2,7 @@
 #include "player.h"
 #include "stdlib.h"
 #include "stdio.h"
+#include <time.h>
 
 int size;
 
@@ -31,7 +32,7 @@ void shuffle() {
 		}
 	}
 	// shuffle the deck with fisher-yates shuffle
-	// //srand (time(NULL)); 
+	//srand (time(NULL)); 
 	for (k = size - 1; k > 0; k--) {
 		int x = rand() % (k+1); // random integer betwen 0 and 52
 		struct card temp = deck_instance.list[k]; // temp for storing card at k
