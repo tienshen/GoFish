@@ -73,7 +73,6 @@ int remove_card(struct player* target, struct card old_card)
 	struct hand* first = target->card_list;
 	struct hand* prev = first;
 	if (target->card_list->top.rank == old_card.rank && target->card_list->top.suit == old_card.suit) {
-		printf("gets through\n");
 		target->card_list = target->card_list->next;
 		target->hand_size--;
 	}
@@ -176,18 +175,21 @@ int transfer_cards(struct player* src, struct player* dest, char rank)
 {
 	int i = 0;
 	if (search(src, rank) == 0) { // if boo = 0, return 0
+		printf("got through first if\n");
 		return i;
 	}
 	struct hand* temp = (struct hand*)malloc(sizeof(struct hand));
 	temp = src->card_list; // I modified the search method to make transfer method
 	while (temp != NULL) {
+		printf("got through while loop\n");
 		if (temp->top.rank == rank) {
-			remove_card(src, temp->top); // remove card from src
 			add_card(dest, temp->top); // add card to dest
+			remove_card(src, temp->top); // remove card from src
 			i++;
 		}
 		temp = temp->next;
 	}
+	printf("got to the end\n");
 	return i;
 }
 
@@ -284,11 +286,16 @@ int main(int args, char* argv[]) {
 	print_hand(user);
 	printf("p2 ");
 	print_hand(computer);
-	printf("\ntest remove card\n");
-	int i = remove_card(user, user->card_list->next->top);
-	if (i != 1) {
-		print_hand(user);
-		printf("there are %i in the hand\n", user->hand_size);
-	}
-	
+	printf("test transfer_card\n");
+	transfer_cards(user, computer, user->card_list->top.rank);
+	print_hand(user);
+	printf("p2 ");
+	print_hand(computer);
+	// printf("\ntest remove card\n");
+	// int i = remove_card(user, user->card_list->next->top);
+	// // if (i != 1) {
+	// 	print_hand(user);
+	// 	printf("there are %i in the hand\n", user->hand_size);
+	// }
+	// printf("test add card\n");
 }

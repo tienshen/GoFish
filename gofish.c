@@ -53,7 +53,7 @@
 
 // int user_turn(struct player* user, struct player* computer) { // user plays
 // 	char rank = user_play(user); // obtain valid rank request
-// 	int boo = transfer_cards(user, computer, rank); //check is target rank is found
+// 	int boo = transfer_cards(computer, user, rank); //check is target rank is found
 // 	if (boo != 0) { // if target rank is found
 // 		//int card_num = transfer_cards(user, computer, rank);
 // 		printf("Player 2 gave you %i cards of rank %c\n", boo, rank);
@@ -80,7 +80,7 @@
 // */
 // int computer_turn(struct player* user, struct player* computer) {
 // 	char rank = computer_play(computer); // obatain valid rank request
-// 	int boo = transfer_cards(computer, user, rank); // check if target rank is found
+// 	int boo = transfer_cards(user, computer, rank); // check if target rank is found
 // 	if (boo != 0){ // if target rank is found
 // 		check_add_book(user, rank);
 // 		return 1;
